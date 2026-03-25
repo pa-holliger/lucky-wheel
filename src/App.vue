@@ -20,7 +20,8 @@
         <Transition name="result">
           <div
             v-if="!isSpinning"
-            class="fixed bg-black p-2 rounded-lg text-white">
+            :class="selectedPartColor === 'red' ? 'bg-red-800' : 'bg-neutral-800'"
+            class="fixed p-2 rounded-lg text-white">
             {{ selectedPartColor }}
           </div>
         </Transition>
@@ -40,7 +41,7 @@ const targetAngle = ref(0)
 
 const WHEEL_PART_COUNT = 16
 const SPIN_DURATION = 3000
-const SETTLE_DURATION = 500
+const SETTLE_DURATION = 3000
 const ZOOM_DURATION = 600
 
 function easeOutCubic(t: number): number {
