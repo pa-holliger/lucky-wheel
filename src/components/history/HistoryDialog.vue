@@ -84,14 +84,13 @@ import redEmote from "@/assets/redEmote.png"
 import HistoryColor from "@/components/history/HistoryColor.vue"
 import HistoryItem from "@/components/history/HistoryItem.vue"
 import { useHistory } from "@/composables/useHistory"
-import { useSound } from "@/composables/useSound"
+import { playSound } from "@/composables/useSound"
 
 const emit = defineEmits<{
   (e: "close"): void
 }>()
 
 const { history } = useHistory()
-const { muted } = useSound()
 
 const redEmotePosition = ref<string>("")
 const blackEmotePosition = ref<string>("")
@@ -180,12 +179,6 @@ function removeEmote(color: string) {
 }
 
 function playOuchSound() {
-  if (muted.value) {
-    return
-  }
-
-  const ouchAudio = new Audio(ouchSound)
-  ouchAudio.currentTime = 0
-  ouchAudio.play()
+  playSound(ouchSound)
 }
 </script>
