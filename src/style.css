@@ -5,3 +5,18 @@
 @theme {
   --font-sans: "Poppins", sans-serif;
 }
+
+@layer utilities {
+  @keyframes ghost-float {
+    0%, 100% {
+      transform: translateY(-4px);
+    }
+    50% {
+      transform: translateY(4px);
+    }
+  }
+
+  .animate-ghost {
+    animation: ghost-float 3s ease-in-out infinite;
+  }
+}

@@ -44,11 +44,12 @@
               @remove-item="removeItem" />
           </template>
 
-          <span
+          <div
             v-else
-            class="text-sm text-neutral-500 px-2">
-            Lance la roulette pour commencer à remplir ton historique !
-          </span>
+            class="flex flex-col items-center justify-center gap-4 p-4 h-full">
+            <span class="i-lucide-ghost size-6 text-neutral-400 animate-ghost hover:text-neutral-200 transition-colors cursor-help" />
+            <span class="text-center text-xs text-neutral-600">Tu n'as pas encore joué de parties</span>
+          </div>
         </div>
 
         <div class="px-4 py-2 bg-neutral-100 border-t border-neutral-200 flex justify-center items-center gap-8">
