@@ -34,22 +34,14 @@
             @click="close" />
         </div>
 
-        <div class="p-2 h-96 overflow-y-auto scrollbar-square flex flex-col gap-4">
+        <div class="h-96 overflow-y-scroll scrollbar-square flex flex-col divide-y divide-neutral-200">
           <template v-if="formattedHistoryByDate.length > 0">
-            <div
+            <HistoryDay
               v-for="group in formattedHistoryByDate"
               :key="group.date"
-              class="flex flex-col gap-2">
-              <p class="text-sm text-neutral-900 font-medium px-2">
-                {{ group.date }}
-              </p>
-              <div class="flex flex-col gap-1">
-                <HistoryItem
-                  v-for="item in group.items"
-                  :key="item.date"
-                  :item="item" />
-              </div>
-            </div>
+              :date="group.date"
+              :items="group.items"
+              @remove-item="removeItem" />
           </template>
 
           <span
@@ -82,7 +74,7 @@ import blackEmote from "@/assets/blackEmote.png"
 import ouchSound from "@/assets/ouchSound.mp3"
 import redEmote from "@/assets/redEmote.png"
 import HistoryColor from "@/components/history/HistoryColor.vue"
-import HistoryItem from "@/components/history/HistoryItem.vue"
+import HistoryDay from "@/components/history/HistoryDay.vue"
 import { useHistory } from "@/composables/useHistory"
 import { playSound } from "@/composables/useSound"
 
@@ -90,7 +82,7 @@ const emit = defineEmits<{
   (e: "close"): void
 }>()
 
-const { history } = useHistory()
+const { history, removeItem } = useHistory()
 
 const redEmotePosition = ref<string>("")
 const blackEmotePosition = ref<string>("")

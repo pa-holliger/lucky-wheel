@@ -24,5 +24,9 @@ export function useHistory() {
     history.value = []
   }
 
-  return { history, addResult, clearHistory }
+  function removeItem(date: string) {
+    history.value = history.value.filter(item => item.date !== date)
+  }
+
+  return { history, addResult, clearHistory, removeItem }
 }

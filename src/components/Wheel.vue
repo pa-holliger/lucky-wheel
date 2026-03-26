@@ -19,7 +19,7 @@
           <div
             :class="selectedPartColor === 'red' ? 'bg-red-800' : 'bg-neutral-900'"
             class="p-2 rounded-lg text-white text-3xl uppercase border border-white font-bold">
-            {{ selectedPartColor }}
+            {{ getColorLabel(selectedPartColor) }}
           </div>
         </div>
       </Transition>
@@ -35,6 +35,7 @@ import wheel from "@/assets/wheel.svg"
 import Emote from "@/components/Emote.vue"
 import { useHistory } from "@/composables/useHistory"
 import { playSound } from "@/composables/useSound"
+import { getColorLabel } from "@/helpers/getColorLabel"
 
 const { addResult } = useHistory()
 const rotation = ref(0)
