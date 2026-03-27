@@ -1,5 +1,7 @@
 <template>
-  <div class="flex flex-col h-dvh bg-neutral-900">
+  <div
+    class="flex flex-col h-dvh bg-neutral-900 bg-cover bg-center"
+    :style="{ backgroundImage: `url(${background})` }">
     <Header @open-history="openHistory" />
 
     <div class="flex-1 flex items-center justify-center overflow-hidden">
@@ -18,6 +20,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
+import background from "@/assets/background.avif"
 import Footer from "@/components/Footer.vue"
 import Header from "@/components/Header.vue"
 import HistoryDialog from "@/components/history/HistoryDialog.vue"

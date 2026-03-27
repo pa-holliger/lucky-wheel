@@ -1,9 +1,18 @@
 <template>
   <div class="flex flex-col items-center">
-    <span class="size-6 text-white i-lucide-arrow-down" />
     <div
-      class="relative flex items-center justify-center"
+      class="relative flex items-center justify-center size-[600px]"
       @click="spin">
+      <img
+        :src="wheelBorder"
+        alt="wheel border"
+        draggable="false"
+        class="size-full select-none absolute inset-0">
+      <img
+        :src="wheelArrow"
+        alt="wheel arrow"
+        draggable="false"
+        class="size-16 absolute -top-4">
       <img
         :src="wheel"
         alt="wheel"
@@ -31,7 +40,9 @@
 import { computed, ref } from "vue"
 import clickSound from "@/assets/clickSound.wav"
 import victorySound from "@/assets/victorySound.flac"
-import wheel from "@/assets/wheel.svg"
+import wheel from "@/assets/wheel.webp"
+import wheelArrow from "@/assets/wheelArrow.webp"
+import wheelBorder from "@/assets/wheelBorder.webp"
 import Emote from "@/components/Emote.vue"
 import { useHistory } from "@/composables/useHistory"
 import { playSound } from "@/composables/useSound"

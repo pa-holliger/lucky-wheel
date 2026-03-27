@@ -1,8 +1,6 @@
 <template>
-  <div class="p-4 grid grid-cols-[1fr_auto_1fr] items-center">
-    <div />
-
-    <span class="text-white text-2xl font-bold">
+  <div class="p-4 grid grid-cols-[auto_1fr] items-center group hover:bg-neutral-900/40 transition-all duration-300">
+    <span class="text-white opacity-25 group-hover:opacity-100 text-2xl font-bold transition-opacity duration-300">
       LA ROULETTE
     </span>
 
@@ -16,7 +14,7 @@
       <div @click="updateVolumeLevel">
         <span
           :class="displayVolumeLevelIcon?.icon"
-          class="size-6 text-white opacity-25 hover:opacity-100 cursor-pointer transition-opacity duration-200"
+          class="size-6 text-white opacity-25 hover:opacity-100 cursor-pointer transition-opacity duration-300"
           role="button"
           :aria-label="displayVolumeLevelIcon?.label" />
       </div>
