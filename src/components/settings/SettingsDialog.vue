@@ -69,7 +69,7 @@
           :src="polineBd"
           alt="poline bdr"
           draggable="false"
-          class="size-16 hover:size-32 opacity-30 hover:opacity-100 transition-all duration-300 cursor-pointer"
+          class="size-16 rotate-6 hover:size-32 opacity-20 hover:opacity-100 hover:-rotate-6 transition-all duration-300 ease-out cursor-pointer"
           @click="openPolineBd">
       </div>
     </div>
