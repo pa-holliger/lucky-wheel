@@ -45,18 +45,18 @@ import wheelArrow from "@/assets/wheelArrow.webp"
 import wheelBorder from "@/assets/wheelBorder.webp"
 import Emote from "@/components/Emote.vue"
 import { useHistory } from "@/composables/useHistory"
+import { TURN_DURATION_MS, useSettings } from "@/composables/useSettings"
 import { playSound } from "@/composables/useSound"
 import { getColorLabel } from "@/helpers/getColorLabel"
 
 const { addResult } = useHistory()
+const { spinTurns, settleDurationMs } = useSettings()
 const rotation = ref(0)
 const isSpinning = ref(false)
 const hasSpinned = ref(false)
 const targetAngle = ref(0)
 
 const WHEEL_PART_COUNT = 16
-const SPIN_DURATION = 3000
-const SETTLE_DURATION = 5000
 
 const selectedPart = computed(() => {
   return targetAngle.value / 360 * WHEEL_PART_COUNT
@@ -65,6 +65,13 @@ const selectedPart = computed(() => {
 const selectedPartColor = computed(() => {
   return Math.floor(selectedPart.value) % 2 !== 0 ? "red" : "black"
 })
+
+function setFavicon(color: "red" | "black") {
+  const link = document.querySelector<HTMLLinkElement>("link[rel='icon']")
+  if (link) {
+    link.href = `/favicon-${color}.ico`
+  }
+}
 
 function easeOutCubic(t: number): number {
   return 1 - (1 - t) ** 3
@@ -77,22 +84,21 @@ function spin() {
   isSpinning.value = true
 
   const startRotation = rotation.value
-  targetAngle.value = Math.random() * 360
+  const settleMs = settleDurationMs.value
 
-  const currentAngle = ((startRotation % 360) + 360) % 360
-  let offset = targetAngle.value - currentAngle
-  if (offset < 0) {
-    offset += 360
-  }
+  // Phase 1 : N tours + offset aléatoire, vitesse constante
+  const randomOffset = Math.random() * 360
+  const spinMs = spinTurns.value * TURN_DURATION_MS
+  const phase1Distance = spinTurns.value * 360 + randomOffset
+  const phase1Speed = phase1Distance / spinMs
 
-  const fullSpins = SPIN_DURATION / 1000
-  const totalDistance = fullSpins * 360 + offset
-  const endRotation = startRotation + totalDistance
+  // Phase 2 : easeOutCubic, vitesse initiale = phase1Speed (continuité)
+  // dérivée de easeOutCubic en t=0 → 3, donc settleArc * 3 / settleMs = phase1Speed
+  const settleArc = phase1Speed * settleMs / 3
 
-  // settleArc calibré pour que la vitesse soit continue à la transition
-  // Phase 1 (linéaire) vitesse finale = Phase 2 (easeOutCubic) vitesse initiale
-  const settleArc = totalDistance / (1 + 3 * SPIN_DURATION / SETTLE_DURATION)
-  const phase1End = endRotation - settleArc
+  const phase1End = startRotation + phase1Distance
+  const endRotation = phase1End + settleArc
+  targetAngle.value = ((endRotation % 360) + 360) % 360
 
   const partAngle = 360 / WHEEL_PART_COUNT
   let lastPartIndex = Math.floor(rotation.value / partAngle)
@@ -108,13 +114,13 @@ function spin() {
       lastPartIndex = currentPartIndex
     }
 
-    if (elapsed < SPIN_DURATION) {
-      const progress = elapsed / SPIN_DURATION
+    if (elapsed < spinMs) {
+      const progress = elapsed / spinMs
       rotation.value = startRotation + (phase1End - startRotation) * progress
       requestAnimationFrame(animate)
     }
-    else if (elapsed < SPIN_DURATION + SETTLE_DURATION) {
-      const progress = (elapsed - SPIN_DURATION) / SETTLE_DURATION
+    else if (elapsed < spinMs + settleMs) {
+      const progress = (elapsed - spinMs) / settleMs
       rotation.value = phase1End + settleArc * easeOutCubic(progress)
       requestAnimationFrame(animate)
     }
@@ -127,6 +133,7 @@ function spin() {
         part: selectedPart.value,
         date: new Date().toISOString(),
       })
+      setFavicon(selectedPartColor.value)
       playSound(victorySound)
     }
   }
